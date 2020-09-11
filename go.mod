@@ -1,23 +1,14 @@
-module github.com/akhamatvarokah/goaerospike
+module github.com/akhamatvarokah/goAerospike
 
 go 1.13
 
 require (
-	cloud.google.com/go v0.37.4 // indirect
-	github.com/DATA-DOG/go-sqlmock v1.3.3 // indirect
-	github.com/akhamatvarokah/goAerospike v0.0.0-20200910055738-7f10d642cd81
-	github.com/badoux/checkmail v0.0.0-20181210160741-9661bd69e9ad
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible
-	github.com/fatih/structs v1.1.0 // indirect
-	github.com/gin-gonic/gin v1.4.0 // indirect
-	github.com/go-test/deep v1.0.2 // indirect
-	github.com/gorilla/handlers v1.4.2 // indirect
-	github.com/gorilla/mux v1.6.2
-	github.com/jinzhu/gorm v1.9.16
+	github.com/aerospike/aerospike-client-go v3.1.0+incompatible
 	github.com/joho/godotenv v1.3.0
-	github.com/kr/pretty v0.2.1 // indirect
-	github.com/satori/go.uuid v1.2.0 // indirect
-	golang.org/x/crypto v0.0.0-20200820211705-5c72a883971a
-	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
-	gopkg.in/go-playground/assert.v1 v1.2.1
+	github.com/labstack/echo v3.3.10+incompatible
+	github.com/labstack/echo/v4 v4.1.17
+	github.com/onsi/ginkgo v1.14.1 // indirect
+	github.com/onsi/gomega v1.10.2 // indirect
+	github.com/yuin/gopher-lua v0.0.0-20200816102855-ee81675732da // indirect
+	golang.org/x/sync v0.0.0-20200625203802-6e8e738ad208 // indirect
 )

@@ -1,11 +1,9 @@
 package main
 
 import (
-	"github.com/akhamatvarokah/goaerospike/api"
+	"github.com/akhamatvarokah/goAerospike/server"
 )
 
 func main() {
-
-	api.Run()
-
+	server.Run()
 }
