@@ -15,8 +15,10 @@ func Route() *echo.Echo {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
-	e.GET("/getAllData", ac.Getdata)
-	e.GET("/getData/:key", ac.GetdataByKey)
+	e.GET("/", ac.Getdata)
+	e.GET("/:key", ac.Getdata)
+
+	e.POST("/", ac.Post)
 
 	return e
 }

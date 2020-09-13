@@ -1,14 +1,18 @@
 package aerospike
 
 import (
+	"errors"
 	"fmt"
-	"strconv"
-	"time"
 
 	as "github.com/aerospike/aerospike-client-go"
 )
 
-var client *as.Client
+type PaylodAerospike struct {
+	NameSpace string      `json:"namespace" form:"name" query:"namespace"`
+	SetName   string      `json:"setname" form:"setname" query:"setname"`
+	Key       string      `json:"key" form:"key" query:"key"`
+	Value     interface{} `json:"value" form:"value" query:"value"`
+}
 
 // MyStruct ...
 type MyStruct struct {
@@ -19,9 +23,13 @@ type MyStruct struct {
 // GetAllData ...
 func GetAllData(nameSpace, setName string) []*MyStruct {
 	result := []*MyStruct{}
+	c, key, exists, err := checkExist(nameSpace, setName)
+	if err != nil || key == nil || exists == false {
+		return nil
+	}
 
 	stmt := as.NewStatement(nameSpace, setName)
-	rs, err := GetAerospikeClient().Query(nil, stmt)
+	rs, err := c.Query(nil, stmt)
 	if err == nil {
 
 		var data map[string]interface{}
@@ -45,48 +53,61 @@ func GetAllData(nameSpace, setName string) []*MyStruct {
 	return result
 }
 
+func InsertData(data PaylodAerospike) *MyStruct {
+	c, key, exists, err := checkExist(data.NameSpace, data.SetName)
+	if err != nil || key == nil || exists == false {
+		return nil
+	}
+
+	bins := as.BinMap{
+		data.Key: data.Value,
+	}
+
+	err = c.Put(nil, key, bins)
+	if err != nil {
+		return nil
+	}
+
+	return &MyStruct{
+		Key:   data.Key,
+		Value: data.Value,
+	}
+}
+
 // GetValueByKey ...
 func GetValueByKey(nameSpace, setName, k string) interface{} {
 	// define a client to connect to
-	c := GetAerospikeClient()
+	c, key, exists, err := checkExist(nameSpace, setName)
+	if err != nil || key == nil || exists == false {
+		return nil
+	}
 
-	key, err := as.NewKey(nameSpace, setName, "key") // user key can be of any supported type
+	rec, err := c.Get(nil, key)
 	if err != nil {
 		panic(err)
+	}
+
+	return rec.Bins[k]
+}
+
+func checkExist(nameSpace, setName string) (*as.Client, *as.Key, bool, error) {
+	c := GetAerospikeClient()
+	key, err := as.NewKey(nameSpace, setName, "key") // user key can be of any supported type
+	if err != nil {
+		return nil, nil, false, errors.New("Namespace not found")
 	}
 
 	exists, err := c.Exists(nil, key)
 	if err != nil {
-		panic(err)
+		return nil, nil, false, errors.New("Namespace not exist")
 	}
 
-	if !exists {
-		return nil
-	}
-
-	rec2, err := c.Get(nil, key)
-	if err != nil {
-		panic(err)
-	}
-
-	return rec2.Bins[k]
+	return c, key, exists, nil
 }
 
-// GetAerospikeClient ..
+// GetAerospkeClient ..
 func GetAerospikeClient() *as.Client {
-	var err error
-	port, _ := strconv.Atoi("3000")
-	maxconn, _ := strconv.Atoi("10")
-	host := "172.28.128.4"
-	timeout, _ := strconv.Atoi("50")
-	idletimeout, _ := strconv.Atoi("3600")
-	clientPolicy := as.NewClientPolicy()
-	clientPolicy.ConnectionQueueSize = maxconn
-	clientPolicy.LimitConnectionsToQueueSize = true
-	clientPolicy.Timeout = time.Duration(timeout) * time.Millisecond
-	clientPolicy.IdleTimeout = time.Duration(idletimeout) * time.Second
-	client, err = as.NewClientWithPolicy(clientPolicy, host, port)
-
+	client, err := as.NewClient("172.28.128.3", 3000)
 	if err != nil {
 		panic(err)
 	}
