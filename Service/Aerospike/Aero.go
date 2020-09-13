@@ -27,14 +27,11 @@ func GetAllData(nameSpace, setName string) []*MyStruct {
 		var data map[string]interface{}
 		for res := range rs.Results() {
 			if res.Err != nil {
-				// handle error here
-				// if you want to exit, cancel the recordset to release the resources
 				fmt.Println("Err------", res.Err)
 				return result
-
-			} else {
-				data = res.Record.Bins
 			}
+
+			data = res.Record.Bins
 		}
 
 		for key, element := range data {
@@ -48,7 +45,34 @@ func GetAllData(nameSpace, setName string) []*MyStruct {
 	return result
 }
 
-// GetAerospikeClient ...
+// GetValueByKey ...
+func GetValueByKey(nameSpace, setName, k string) interface{} {
+	// define a client to connect to
+	c := GetAerospikeClient()
+
+	key, err := as.NewKey(nameSpace, setName, "key") // user key can be of any supported type
+	if err != nil {
+		panic(err)
+	}
+
+	exists, err := c.Exists(nil, key)
+	if err != nil {
+		panic(err)
+	}
+
+	if !exists {
+		return nil
+	}
+
+	rec2, err := c.Get(nil, key)
+	if err != nil {
+		panic(err)
+	}
+
+	return rec2.Bins[k]
+}
+
+// GetAerospikeClient ..
 func GetAerospikeClient() *as.Client {
 	var err error
 	port, _ := strconv.Atoi("3000")
@@ -62,6 +86,7 @@ func GetAerospikeClient() *as.Client {
 	clientPolicy.Timeout = time.Duration(timeout) * time.Millisecond
 	clientPolicy.IdleTimeout = time.Duration(idletimeout) * time.Second
 	client, err = as.NewClientWithPolicy(clientPolicy, host, port)
+
 	if err != nil {
 		panic(err)
 	}
