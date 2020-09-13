@@ -18,7 +18,8 @@ func Route() *echo.Echo {
 	e.GET("/", ac.Getdata)
 	e.GET("/:key", ac.Getdata)
 
-	e.POST("/", ac.Post)
+	e.POST("/", ac.Insert)
+	e.PUT("/", ac.Edit)
 
 	return e
 }
