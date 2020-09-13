@@ -34,8 +34,35 @@ func Getdata(c echo.Context) error {
 	}
 }
 
+func Edit(c echo.Context) error {
+	u := new(postData)
+	if err := c.Bind(u); err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+
+	if u.Key == "" || u.Value == "" {
+		return c.JSON(http.StatusBadRequest, "Key or value cant null")
+	}
+
+	if u.NameSpace == "" {
+		u.NameSpace = "test"
+	}
+
+	if u.SetName == "" {
+		u.SetName = "aerospike"
+	}
+
+	result := ar.Edit(ar.PaylodAerospike{
+		NameSpace: u.NameSpace,
+		SetName:   u.SetName,
+		Key:       u.Key,
+		Value:     u.Value,
+	})
+	return c.JSON(http.StatusOK, result)
+}
+
 // Post ...
-func Post(c echo.Context) error {
+func Insert(c echo.Context) error {
 	u := new(postData)
 	if err := c.Bind(u); err != nil {
 		return c.JSON(http.StatusBadRequest, err)

@@ -105,6 +105,36 @@ func checkExist(nameSpace, setName string) (*as.Client, *as.Key, bool, error) {
 	return c, key, exists, nil
 }
 
+func Edit(data PaylodAerospike) *MyStruct {
+	c, key, exists, err := checkExist(data.NameSpace, data.SetName)
+	if err != nil || key == nil || exists == false {
+		return nil
+	}
+
+	rec, err := c.Get(nil, key)
+	if err != nil {
+		panic(err)
+	}
+
+	if rec.Bins[data.Key] == nil {
+		return nil
+	}
+
+	bins := as.BinMap{
+		data.Key: data.Value,
+	}
+
+	err = c.Put(nil, key, bins)
+	if err != nil {
+		return nil
+	}
+
+	return &MyStruct{
+		Key:   data.Key,
+		Value: data.Value,
+	}
+}
+
 // GetAerospkeClient ..
 func GetAerospikeClient() *as.Client {
 	client, err := as.NewClient("172.28.128.3", 3000)
