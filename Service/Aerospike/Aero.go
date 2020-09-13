@@ -141,8 +141,8 @@ func Destroy(data PaylodAerospike) interface{} {
 		return nil
 	}
 
-	existed, err := c.Delete(nil, key)
-	if err != nil || existed == false {
+	err = c.Put(nil, key, as.BinMap{data.Key: nil})
+	if err != nil {
 		return "Failed delete data or data not exit"
 	}
 

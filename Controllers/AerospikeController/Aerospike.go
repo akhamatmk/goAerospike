@@ -68,7 +68,7 @@ func DeleteData(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, "Key cant null")
 	}
 
-	result := ar.Edit(ar.PaylodAerospike{
+	result := ar.Destroy(ar.PaylodAerospike{
 		NameSpace: "test",
 		SetName:   "aerospike",
 		Key:       key,
