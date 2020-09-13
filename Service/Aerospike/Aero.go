@@ -135,6 +135,20 @@ func Edit(data PaylodAerospike) *MyStruct {
 	}
 }
 
+func Destroy(data PaylodAerospike) interface{} {
+	c, key, exists, err := checkExist(data.NameSpace, data.SetName)
+	if err != nil || key == nil || exists == false {
+		return nil
+	}
+
+	existed, err := c.Delete(nil, key)
+	if err != nil || existed == false {
+		return "Failed delete data or data not exit"
+	}
+
+	return "Success Delete"
+}
+
 // GetAerospkeClient ..
 func GetAerospikeClient() *as.Client {
 	client, err := as.NewClient("172.28.128.3", 3000)

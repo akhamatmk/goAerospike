@@ -58,6 +58,22 @@ func Edit(c echo.Context) error {
 		Key:       u.Key,
 		Value:     u.Value,
 	})
+
+	return c.JSON(http.StatusOK, result)
+}
+
+func DeleteData(c echo.Context) error {
+	key := c.Param("key")
+	if key == "" {
+		return c.JSON(http.StatusBadRequest, "Key cant null")
+	}
+
+	result := ar.Edit(ar.PaylodAerospike{
+		NameSpace: "test",
+		SetName:   "aerospike",
+		Key:       key,
+	})
+
 	return c.JSON(http.StatusOK, result)
 }
 

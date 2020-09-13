@@ -20,6 +20,7 @@ func Route() *echo.Echo {
 
 	e.POST("/", ac.Insert)
 	e.PUT("/", ac.Edit)
+	e.DELETE("/:key", ac.DeleteData)
 
 	return e
 }
