@@ -151,7 +151,7 @@ func Destroy(data PaylodAerospike) interface{} {
 
 // GetAerospkeClient ..
 func GetAerospikeClient() *as.Client {
-	client, err := as.NewClient("172.28.128.3", 3000)
+	client, err := as.NewClient("172.28.128.4", 3000)
 	if err != nil {
 		panic(err)
 	}

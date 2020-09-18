@@ -1,6 +1,7 @@
 package aerospikecontroller
 
 import (
+	"github.com/akhamatvarokah/goAerospike/Utils"
 	"net/http"
 
 	ar "github.com/akhamatvarokah/goAerospike/service/aerospike"
@@ -23,14 +24,14 @@ func Getdata(c echo.Context) error {
 		data := ar.GetAllData("test", "aerospike")
 
 		if len(data) > 0 {
-			return c.JSON(http.StatusOK, data)
+			return c.JSON(http.StatusOK, Utils.ResponseOk(data))
 		} else {
-			return c.JSON(http.StatusOK, nil)
+			return c.JSON(http.StatusOK, Utils.ResponseOk(nil))
 		}
 
 	} else {
 		result := ar.GetValueByKey("test", "aerospike", key)
-		return c.JSON(http.StatusOK, result)
+		return c.JSON(http.StatusOK, Utils.ResponseOk(result))
 	}
 }
 
@@ -74,7 +75,7 @@ func DeleteData(c echo.Context) error {
 		Key:       key,
 	})
 
-	return c.JSON(http.StatusOK, result)
+	return c.JSON(http.StatusOK, Utils.ResponseOk(result))
 }
 
 // Post ...
@@ -102,5 +103,5 @@ func Insert(c echo.Context) error {
 		Key:       u.Key,
 		Value:     u.Value,
 	})
-	return c.JSON(http.StatusOK, result)
+	return c.JSON(http.StatusOK, Utils.ResponseOk(result))
 }
