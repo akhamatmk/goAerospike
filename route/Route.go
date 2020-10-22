@@ -8,7 +8,7 @@ import (
 	"github.com/labstack/echo/middleware"
 
 	us "github.com/akhamatvarokah/goAerospike/controllers/userController"
-	ac "github.com/akhamatvarokah/goAerospike/controllers/aerospikecontroller"
+	ac "github.com/akhamatvarokah/goAerospike/controllers"
 )
 
 type jwtCustomClaims struct {

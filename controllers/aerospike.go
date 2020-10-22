@@ -1,4 +1,4 @@
-package Aerospikecontroller
+package controllers
 
 import (
 	"net/http"
@@ -120,3 +120,4 @@ func Insert(c echo.Context) error {
 	})
 	return c.JSON(http.StatusOK, Utils.ResponseOk(result))
 }
+
