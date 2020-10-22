@@ -2,26 +2,41 @@ package aerospikecontroller
 
 import (
 	"github.com/akhamatvarokah/goAerospike/Utils"
-	"net/http"
-
 	ar "github.com/akhamatvarokah/goAerospike/service/aerospike"
-
 	"github.com/labstack/echo"
+	"net/http"
 )
 
 type postData struct {
-	NameSpace string      `json:"namespace" form:"name" query:"namespace"`
+	NameSpace string      `json:"namespace" form:"namespace" query:"namespace"`
 	SetName   string      `json:"setname" form:"setname" query:"setname"`
 	Key       string      `json:"key" form:"key" query:"key"`
 	Value     interface{} `json:"value" form:"value" query:"value"`
+	KeyBin    string      `json:"keybin" form:"keybin" query:"keybin"`
+}
+
+func GetNameSpace(c echo.Context) error {
+	setName := [2]string{"knox", "mnemonic"}
+	return c.JSON(http.StatusOK, Utils.ResponseOk(setName))
+}
+
+func GetSetName(c echo.Context) error {
+	namespace := c.Param("namespace")
+
+	data := ar.GetAllSetname(namespace)
+	return c.JSON(http.StatusOK, Utils.ResponseOk(data))
 }
 
 // Getdata ...
 func Getdata(c echo.Context) error {
 	key := c.Param("key")
-	if key == "" {
+	namespace := c.QueryParam("namespace")
+	setname := c.QueryParam("setname")
+	keybin := c.QueryParam("key_bin")
+	filter := c.QueryParam("filter")
 
-		data := ar.GetAllData("test", "aerospike")
+	if key == "" {
+		data := ar.GetAllData(namespace, setname, keybin, filter)
 
 		if len(data) > 0 {
 			return c.JSON(http.StatusOK, Utils.ResponseOk(data))
@@ -30,13 +45,14 @@ func Getdata(c echo.Context) error {
 		}
 
 	} else {
-		result := ar.GetValueByKey("test", "aerospike", key)
+		result := ar.GetValueByKey(namespace, setname, keybin, key)
 		return c.JSON(http.StatusOK, Utils.ResponseOk(result))
 	}
 }
 
 func Edit(c echo.Context) error {
 	u := new(postData)
+
 	if err := c.Bind(u); err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
@@ -46,11 +62,15 @@ func Edit(c echo.Context) error {
 	}
 
 	if u.NameSpace == "" {
-		u.NameSpace = "test"
+		return c.JSON(http.StatusBadRequest, "NameSpace or value cant null")
 	}
 
 	if u.SetName == "" {
-		u.SetName = "aerospike"
+		return c.JSON(http.StatusBadRequest, "SetName or value cant null")
+	}
+
+	if u.KeyBin == "" {
+		return c.JSON(http.StatusBadRequest, "Bin or value cant null")
 	}
 
 	result := ar.Edit(ar.PaylodAerospike{
@@ -65,14 +85,15 @@ func Edit(c echo.Context) error {
 
 func DeleteData(c echo.Context) error {
 	key := c.Param("key")
-	if key == "" {
-		return c.JSON(http.StatusBadRequest, "Key cant null")
-	}
+	namespace := c.Param("namespace")
+	setname := c.Param("setname")
+	bin := c.Param("bin")
 
 	result := ar.Destroy(ar.PaylodAerospike{
-		NameSpace: "test",
-		SetName:   "aerospike",
+		NameSpace: namespace,
+		SetName:   setname,
 		Key:       key,
+		KeyBin:    bin,
 	})
 
 	return c.JSON(http.StatusOK, Utils.ResponseOk(result))
@@ -89,19 +110,12 @@ func Insert(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, "Key or value cant null")
 	}
 
-	if u.NameSpace == "" {
-		u.NameSpace = "test"
-	}
-
-	if u.SetName == "" {
-		u.SetName = "aerospike"
-	}
-
 	result := ar.InsertData(ar.PaylodAerospike{
 		NameSpace: u.NameSpace,
 		SetName:   u.SetName,
 		Key:       u.Key,
 		Value:     u.Value,
+		KeyBin:    u.KeyBin,
 	})
 	return c.JSON(http.StatusOK, Utils.ResponseOk(result))
 }

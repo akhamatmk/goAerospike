@@ -1,5 +1,7 @@
 github.com/aerospike/aerospike-client-go v3.1.0+incompatible h1:ggcqXpZOCBlMptXPooX9MQfOa8aKIPhdCqLwAjR5M9U=
 github.com/aerospike/aerospike-client-go v3.1.0+incompatible/go.mod h1:zj8LBEnWBDOVEIJt8LvaRvDG5ARAoa5dBeHaB472NRc=
+github.com/akhamatvarokah/admin_ui v0.0.0-20201018231428-c92c661e018e h1:Zamj71XEWUiSmtjiDcug3q42ZztY5LdTDcXah5cA8F8=
+github.com/akhamatvarokah/admin_ui v0.0.0-20201018231428-c92c661e018e/go.mod h1:opAZbdwdDxvb1NcQys8fE8GrwfNw6cwVywanXYgYe5Y=
 github.com/chzyer/logex v1.1.10/go.mod h1:+Ywpsq7O8HXn0nuIou7OrIPyXbp3wmkHB+jjWRnGsAI=
 github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e/go.mod h1:nSuG5e5PlCu98SY8svDHJxuZscDgtXS6KTTbou5AhLI=
 github.com/chzyer/test v0.0.0-20180213035817-a1ea475d72b1/go.mod h1:Q3SI9o4m/ZMnBNeIyt5eFwwo7qiLfzFZmjNmxjkiQlU=
