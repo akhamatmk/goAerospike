@@ -1,4 +1,4 @@
-package aerospikecontroller
+package Aerospikecontroller
 
 import (
 	"net/http"
