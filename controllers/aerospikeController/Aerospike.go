@@ -1,10 +1,11 @@
 package aerospikecontroller
 
 import (
-	"github.com/akhamatvarokah/goAerospike/Utils"
-	ar "github.com/akhamatvarokah/goAerospike/service/aerospike"
-	"github.com/labstack/echo"
 	"net/http"
+
+	ar "github.com/akhamatvarokah/goAerospike/service/aerospike"
+	Utils "github.com/akhamatvarokah/goAerospike/utils"
+	"github.com/labstack/echo"
 )
 
 type postData struct {

@@ -2,12 +2,13 @@ package UserController
 
 import (
 	"fmt"
-	"github.com/akhamatvarokah/goAerospike/Utils"
+	"net/http"
+
+	"github.com/akhamatvarokah/goAerospike/utils"
 	ar "github.com/akhamatvarokah/goAerospike/service/aerospike"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
 	"golang.org/x/crypto/bcrypt"
-	"net/http"
 )
 
 type postUser struct {
