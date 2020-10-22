@@ -1,12 +1,13 @@
 package route
 
 import (
+	"net/http"
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
-	"net/http"
 
-	us "github.com/akhamatvarokah/goAerospike/Controllers/UserController"
+	us "github.com/akhamatvarokah/goAerospike/controllers/userController"
 	ac "github.com/akhamatvarokah/goAerospike/controllers/aerospikecontroller"
 )
 
